@@ -36,10 +36,12 @@ export const zhCN = {
   Plugins: '插件',
   Hooks: '钩子（Hooks）',
   'Programmatic Usage': '编程使用',
+  Benchmark: '性能基准',
   FAQ: '常见问题',
 
-  'Config Options': '配置选项',
   'Command Line Interface': '命令行接口',
+  'Config Options': '配置选项',
+  'Type Definitions': '类型定义',
 
   'The Elegant Bundler for Libraries': '优雅的库打包器',
 

@@ -32,16 +32,16 @@ export default defineConfig({
 ```ts [tsdown.config.ts]
 import { defineConfig } from 'tsdown/config'
 
-export default [
-  defineConfig({
+export default defineConfig([
+  {
     entry: 'src/entry1.ts',
     platform: 'node',
-  }),
-  defineConfig({
+  },
+  {
     entry: 'src/entry2.ts',
     platform: 'browser',
-  }),
-]
+  },
+])
 ```
 
 ## 指定自定义配置文件
@@ -81,4 +81,4 @@ tsdown --from-vite vitest # 加载 vitest.config.*
 
 ## 参考
 
-有关可用配置选项的完整列表，请参阅 [配置选项参考](../reference/config-options.md)。其中包括所有支持字段及其用法的详细说明。
+有关可用配置选项的完整列表，请参阅 [配置选项参考](../reference/api/Interface.Options.md)。其中包括所有支持字段及其用法的详细说明。

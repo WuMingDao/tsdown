@@ -1,9 +1,21 @@
 import type { AttwOptions } from '../features/attw'
-import type { CopyOptions, CopyOptionsFn } from '../features/copy'
-import type { ExportsOptions } from '../features/exports'
-import type { TsdownHooks } from '../features/hooks'
-import type { OutExtensionFactory } from '../features/output'
+import type { CopyEntry, CopyOptions, CopyOptionsFn } from '../features/copy'
+import type { ExportsOptions, TsdownChunks } from '../features/exports'
+import type {
+  BuildContext,
+  RolldownContext,
+  TsdownHooks,
+} from '../features/hooks'
+import type {
+  ChunkAddon,
+  ChunkAddonFunction,
+  ChunkAddonObject,
+  OutExtensionContext,
+  OutExtensionFactory,
+  OutExtensionObject,
+} from '../features/output'
 import type { ReportOptions } from '../features/report'
+import type { PackageType } from '../utils/package'
 import type {
   Arrayable,
   Awaitable,
@@ -43,6 +55,28 @@ export type ModuleTypes = Record<
   | 'css'
   | 'asset'
 >
+export type {
+  AttwOptions,
+  BuildContext,
+  ChunkAddon,
+  ChunkAddonFunction,
+  ChunkAddonObject,
+  CopyEntry,
+  CopyOptions,
+  CopyOptionsFn,
+  DtsOptions,
+  ExportsOptions,
+  OutExtensionContext,
+  OutExtensionFactory,
+  OutExtensionObject,
+  PackageType,
+  PublintOptions,
+  ReportOptions,
+  RolldownContext,
+  TsdownChunks,
+  TsdownHooks,
+  UnusedOptions,
+}
 
 export interface Workspace {
   /**
@@ -98,6 +132,7 @@ export interface Options {
     | ((
         options: InputOptions,
         format: NormalizedFormat,
+        context: { cjsDts: boolean },
       ) => Awaitable<InputOptions | void | null>)
 
   /// output options
@@ -160,7 +195,8 @@ export interface Options {
 
   /**
    * The name to show in CLI output. This is useful for monorepos or workspaces.
-   * Defaults to the package name from `package.json`.
+   * When using workspace mode, this option defaults to the package name from package.json.
+   * In non-workspace mode, this option must be set explicitly for the name to show in the CLI output.
    */
   name?: string
 
@@ -182,6 +218,7 @@ export interface Options {
     | ((
         options: OutputOptions,
         format: NormalizedFormat,
+        context: { cjsDts: boolean },
       ) => Awaitable<OutputOptions | void | null>)
 
   /** @default true */
@@ -359,6 +396,8 @@ export interface Options {
    * Filter workspace packages. This option is only available in workspace mode.
    */
   filter?: RegExp | string | string[]
+  footer?: ChunkAddon
+  banner?: ChunkAddon
 }
 
 /**
@@ -389,6 +428,8 @@ export type ResolvedOptions = Omit<
       | 'loader'
       | 'name'
       | 'bundle'
+      | 'banner'
+      | 'footer'
     >,
     {
       format: NormalizedFormat[]

@@ -16,12 +16,12 @@ import { exec } from 'tinyexec'
 import { attw } from './features/attw'
 import { cleanOutDir } from './features/clean'
 import { copy } from './features/copy'
-import { writeExports } from './features/exports'
+import { writeExports, type TsdownChunks } from './features/exports'
 import { ExternalPlugin } from './features/external'
 import { createHooks } from './features/hooks'
 import { LightningCSSPlugin } from './features/lightningcss'
 import { NodeProtocolPlugin } from './features/node-protocol'
-import { resolveChunkFilename } from './features/output'
+import { resolveChunkAddon, resolveChunkFilename } from './features/output'
 import { publint } from './features/publint'
 import { ReportPlugin } from './features/report'
 import { getShimsInject } from './features/shims'
@@ -37,7 +37,7 @@ import {
 } from './options'
 import { ShebangPlugin } from './plugins'
 import { lowestCommonAncestor } from './utils/fs'
-import { logger } from './utils/logger'
+import { logger, type Logger } from './utils/logger'
 import type { Options as DtsOptions } from 'rolldown-plugin-dts'
 
 /**
@@ -80,11 +80,10 @@ export async function build(userOptions: Options = {}): Promise<void> {
 }
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
-export const pkgRoot: string = path.resolve(dirname, '..')
+const pkgRoot: string = path.resolve(dirname, '..')
 
-export type TsdownChunks = Partial<
-  Record<NormalizedFormat, Array<OutputChunk | OutputAsset>>
->
+/** @internal */
+export const shimFile: string = path.resolve(pkgRoot, 'esm-shims.js')
 
 /**
  * Build a single configuration, without watch and shortcuts features.
@@ -289,6 +288,8 @@ async function getBuildOptions(
     name,
     unbundle,
     watch,
+    banner,
+    footer,
   } = config
 
   const plugins: RolldownPluginOption = []
@@ -339,6 +340,7 @@ async function getBuildOptions(
     plugins.push(WatchPlugin(chunks!, config, configFiles, restart))
   }
 
+  cjsDts = !!cjsDts
   const inputOptions = await mergeUserOptions(
     {
       input: entry,
@@ -369,7 +371,7 @@ async function getBuildOptions(
       moduleTypes: loader,
     },
     config.inputOptions,
-    [format],
+    [format, { cjsDts }],
   )
 
   const [entryFileNames, chunkFileNames] = resolveChunkFilename(
@@ -390,9 +392,11 @@ async function getBuildOptions(
       preserveModulesRoot: unbundle
         ? lowestCommonAncestor(...Object.values(entry))
         : undefined,
+      banner: resolveChunkAddon(banner, format),
+      footer: resolveChunkAddon(footer, format),
     },
     config.outputOptions,
-    [format],
+    [format, { cjsDts }],
   )
 
   return {
@@ -408,5 +412,5 @@ export type {
   UserConfig,
   UserConfigFn,
 } from './options'
-export type { BuildContext, TsdownHooks } from './features/hooks'
-export { logger }
+export * from './options/types'
+export { logger, type Logger }

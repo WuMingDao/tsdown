@@ -1,5 +1,25 @@
+import { existsSync } from 'node:fs'
+import path from 'node:path'
 import { createTranslate } from '../i18n/utils'
 import type { DefaultTheme, HeadConfig, LocaleConfig } from 'vitepress'
+
+async function getTypedocSidebar() {
+  const filepath = path.resolve(
+    import.meta.dirname,
+    '../../reference/api/typedoc-sidebar.json',
+  )
+  if (!existsSync(filepath)) return []
+
+  try {
+    return (await import(filepath, { with: { type: 'json' } }))
+      .default as DefaultTheme.SidebarItem[]
+  } catch (error) {
+    console.error('Failed to load typedoc sidebar:', error)
+    return []
+  }
+}
+
+const typedocSidebar = await getTypedocSidebar()
 
 export function getLocaleConfig(lang: string) {
   const t = createTranslate(lang)
@@ -37,7 +57,7 @@ export function getLocaleConfig(lang: string) {
     { text: t('Guide'), link: `${urlPrefix}/guide/` },
     {
       text: t('API Reference'),
-      link: `${urlPrefix}/reference/config-options.md`,
+      link: `${urlPrefix}/reference/api/Interface.Options.md`,
     },
     { text: t('FAQ'), link: `${urlPrefix}/guide/faq.md` },
   ]
@@ -89,14 +109,25 @@ export function getLocaleConfig(lang: string) {
         { text: t('Hooks'), link: '/hooks.md' },
         { text: t('Rolldown Options'), link: '/rolldown-options.md' },
         { text: t('Programmatic Usage'), link: '/programmatic-usage.md' },
+        { text: t('Benchmark'), link: '/benchmark.md' },
       ],
     },
     {
       text: t('API Reference'),
       base: `${urlPrefix}/reference`,
       items: [
-        { text: t('Config Options'), link: '/config-options.md' },
         { text: t('Command Line Interface'), link: '/cli.md' },
+        {
+          text: t('Config Options'),
+          link: '/api/Interface.Options.md',
+        },
+        {
+          text: t('Type Definitions'),
+          items: typedocSidebar
+            .flatMap((i) => i.items!)
+            .filter((i) => i.text !== 'Options'),
+          collapsed: true,
+        },
       ],
     },
   ]

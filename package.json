@@ -1,7 +1,7 @@
 {
   "name": "tsdown",
-  "version": "0.12.9",
-  "packageManager": "pnpm@10.12.3",
+  "version": "0.13.0",
+  "packageManager": "pnpm@10.13.1",
   "description": "The Elegant Bundler for Libraries",
   "type": "module",
   "license": "MIT",
@@ -116,6 +116,7 @@
     "tsx": "catalog:dev",
     "typedoc": "catalog:docs",
     "typedoc-plugin-markdown": "catalog:docs",
+    "typedoc-vitepress-theme": "catalog:docs",
     "typescript": "catalog:dev",
     "unocss": "catalog:docs",
     "unplugin-lightningcss": "catalog:dev",
@@ -129,10 +130,6 @@
   },
   "engines": {
     "node": ">=20.19.0"
-  },
-  "resolutions": {
-    "rolldown": "catalog:prod",
-    "vite": "catalog:docs"
   },
   "prettier": "@sxzz/prettier-config"
 }

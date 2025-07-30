@@ -32,16 +32,16 @@ export default defineConfig({
 ```ts [tsdown.config.ts]
 import { defineConfig } from 'tsdown/config'
 
-export default [
-  defineConfig({
+export default defineConfig([
+  {
     entry: 'src/entry1.ts',
     platform: 'node',
-  }),
-  defineConfig({
+  },
+  {
     entry: 'src/entry2.ts',
     platform: 'browser',
-  }),
-]
+  },
+])
 ```
 
 ## Specifying a Custom Config File
@@ -81,4 +81,4 @@ tsdown --from-vite vitest # Load vitest.config.*
 
 ## Reference
 
-For a full list of available configuration options, refer to the [Config Options Reference](../reference/config-options.md). This includes detailed explanations of all supported fields and their usage.
+For a full list of available configuration options, refer to the [Config Options Reference](../reference/api/Interface.Options.md). This includes detailed explanations of all supported fields and their usage.

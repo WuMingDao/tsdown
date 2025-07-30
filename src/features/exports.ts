@@ -2,11 +2,14 @@ import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { RE_DTS } from 'rolldown-plugin-dts/filename'
 import { slash } from '../utils/general'
-import type { TsdownChunks } from '..'
 import type { NormalizedFormat, ResolvedOptions } from '../options'
 import type { Awaitable } from '../utils/types'
 import type { PackageJson } from 'pkg-types'
 import type { OutputAsset, OutputChunk } from 'rolldown'
+
+export type TsdownChunks = Partial<
+  Record<NormalizedFormat, Array<OutputChunk | OutputAsset>>
+>
 
 export interface ExportsOptions {
   /**
@@ -139,7 +142,8 @@ export async function generateExports(
           }
         }
       } else {
-        name = `./${name}`
+        const isDirIndex = name.endsWith('/index')
+        name = isDirIndex ? `./${name.slice(0, -6)}` : `./${name}`
       }
 
       let subExport = exportsMap.get(name)
