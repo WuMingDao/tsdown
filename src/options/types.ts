@@ -243,6 +243,9 @@ export interface Options {
   config?: boolean | string
   /** @default false */
   watch?: boolean | Arrayable<string>
+  /**
+   * Files or patterns to not watch while in watch mode.
+   */
   ignoreWatch?: Arrayable<string | RegExp>
 
   /**
