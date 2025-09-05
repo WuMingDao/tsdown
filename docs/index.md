@@ -16,6 +16,11 @@ hero:
       text: Get Started
       link: /guide/
     - theme: alt
+      text: Download
+      link: https://www.npmjs.com/package/tsdown
+      target: _blank
+      rel: noopener noreferrer
+    - theme: alt
       text: API Reference
       link: /reference/api/Interface.Options.md
 
