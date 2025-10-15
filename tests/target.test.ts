@@ -57,4 +57,20 @@ describe('target', () => {
     // Modern CSS syntax should be preserved when target is false
     expect(snapshot).contain('&')
   })
+
+  test('numeric target flag should show a useful error message', async (context) => {
+    const run = async () =>
+      await testBuild({
+        context,
+        files: { 'index.ts': 'export const foo = 1' },
+        options: {
+          // @ts-expect-error: A numeric target flag is not valid
+          target: 24,
+        },
+      })
+    await expect(run).rejects.toThrow()
+    await expect(run).rejects.toMatchInlineSnapshot(
+      `[TypeError: format.split is not a function]`,
+    )
+  })
 })
