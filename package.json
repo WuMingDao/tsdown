@@ -123,7 +123,8 @@
     "unplugin-lightningcss": "catalog:dev",
     "unplugin-unused": "catalog:dev",
     "vite": "catalog:docs",
-    "vitest": "catalog:dev"
+    "vitest": "catalog:dev",
+    "zod": "catalog:dev"
   },
   "engines": {
     "node": ">=20.19.0"

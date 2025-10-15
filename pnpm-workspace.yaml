@@ -27,6 +27,7 @@ catalogs:
     unplugin-lightningcss: ^0.4.3
     unplugin-unused: ^0.5.4
     vitest: ^3.2.4
+    zod: ^4.1.12
 
   docs:
     '@shikijs/vitepress-twoslash': ^3.13.0
